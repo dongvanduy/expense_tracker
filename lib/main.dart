@@ -11,6 +11,7 @@ import 'package:expense_tracker/page/onboarding/onboarding_page.dart';
 import 'package:expense_tracker/setting/bloc/setting_cubit.dart';
 import 'package:expense_tracker/setting/bloc/setting_state.dart';
 import 'package:expense_tracker/setting/localization/app_localizations_setup.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 int? language;
 bool isDark = false;
@@ -19,6 +20,7 @@ bool appLockEnabled = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   await SpendingRepository.init();
   final prefs = await SharedPreferences.getInstance();
   language = prefs.getInt('language');

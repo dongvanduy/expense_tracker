@@ -9,6 +9,7 @@ import '../../../controls/gemini_service.dart';
 import '../../../controls/spending_repository.dart';
 import '../../../models/spending.dart';
 import '../../../setting/localization/app_localizations.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart'; // Add this
 
 class GeminiChatPage extends StatefulWidget {
   const GeminiChatPage({super.key});
@@ -44,7 +45,13 @@ class _GeminiChatPageState extends State<GeminiChatPage> {
   Future<void> _loadApiKey() async {
     final prefs = await SharedPreferences.getInstance();
     if (!mounted) return;
-    setState(() => _apiKey = prefs.getString('gemini_api_key'));
+    //Try shareedPreferences first (user overrive)
+    String? key = prefs.getString('gemini_api_key');
+
+    if(key == null || key.isEmpty){
+      key = dotenv.env['GEMINI_API_KEY'];
+    }
+    setState(() => _apiKey = key);
   }
 
   Future<void> _saveApiKey(String apiKey) async {
