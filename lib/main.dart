@@ -20,7 +20,12 @@ bool appLockEnabled = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
+
+  try {
+    await dotenv.load(fileName: ".env"); // Must be awaited
+  } catch (e) {
+    debugPrint("Error loading .env file: $e");
+  }
   await SpendingRepository.init();
   final prefs = await SharedPreferences.getInstance();
   language = prefs.getInt('language');
